@@ -1,21 +1,23 @@
 #!mruby
+m = MERB.new
+$count = 0
 
 get "/" do
-'
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="/foo.js"></script>
-<div id="foo"></div>
-<img src="/logo.png"><br />
-<form action="/add" method="post">
-<label for="name"/>お名前</label>
-<input type="text" id="name" name="name" value="">
-<input type="submit">
-</form>
-'
+  $count += 1
+  m.convert('main.tmpl')
 end
 
-get "/options" do
+get "/options.json" do |r, param|
   Sinatic.options.to_json
+end
+
+get "/echo.json" do |r, param|
+  {
+    r:r,
+    query:r.query,
+    pairs:query(r), #Gets query string as a hash
+    param:param
+  }.to_json
 end
 
 post "/add" do |r, param|

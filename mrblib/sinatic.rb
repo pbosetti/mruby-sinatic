@@ -27,6 +27,7 @@ module Sinatic
     public: 'public'
   }
   @routes = {'GET' => [], 'POST' => []}
+  @request = ''
   @shutdown = false
   
   def self.options
@@ -205,11 +206,19 @@ module Kernel
   end
   
   def content_type(type)
-    ::Sinatic.content_type type
+    ::Sinatic.content_type = type
   end
   
   def set(key, value)
     ::Sinatic.set key, value
+  end
+  
+  def query(r)
+    pairs = r.query.split('&')
+    keys = []
+    values = []
+    pairs.each {|e| k, v = e.split('='); keys << k; values << v}
+    return keys.zip(values).to_h
   end
 end
 
