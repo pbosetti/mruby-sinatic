@@ -14,6 +14,10 @@ get "/" do
 '
 end
 
+get "/options" do
+  Sinatic.options.to_json
+end
+
 post "/add" do |r, param|
 "
 <meta http-equiv=refresh content='2; URL=/'>
@@ -21,4 +25,4 @@ post "/add" do |r, param|
 "
 end
 
-Sinatic.run
+Sinatic.run :host => '0.0.0.0'
