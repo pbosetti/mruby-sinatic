@@ -16,6 +16,7 @@ module Sinatic
     'html' => 'text/html' ,
     'css'  => 'text/css',
     'js'   => 'text/javascript',
+    'json' => 'application/json'
   }
   TYPE_FOR_EXT.default = 'application/octet-stream'
   
@@ -36,7 +37,11 @@ module Sinatic
     @routes[method] << [path, opts, block]
   end
   
-  def self.content_type(type)
+  def self.content_type
+    @content_type
+  end
+  
+  def self.content_type=(type)
     @content_type = type
   end
   
@@ -77,7 +82,12 @@ module Sinatic
           end
         end
       end
-      @content_type = 'text/html; charset=utf-8'
+      parts = r.path.split(".")
+      if parts.size > 1 then
+        @content_type = TYPE_FOR_EXT[parts.last]
+      else
+        @content_type = 'text/html; charset=utf-8'
+      end
       bb = route[0][2].call(r, param)
       if bb.class == Array
         code, bb = bb
@@ -141,6 +151,7 @@ module Sinatic
             r.body = c.data.slice(i + 4, c.data.size - i - 4)
             if !r.headers['Content-Length'] || r.headers['Content-Length'].to_i == r.body.size
               code, bb = ::Sinatic.do(r)
+              @content_type = nil
               if !r.headers['Connection'] || r.headers['Connection'].upcase != 'KEEP-ALIVE'
                 c.write(bb) do |x|
                   c.close if c && !c.closing?
