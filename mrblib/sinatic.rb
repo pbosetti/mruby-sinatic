@@ -16,6 +16,7 @@ module Sinatic
     'html' => 'text/html' ,
     'css'  => 'text/css',
     'js'   => 'text/javascript',
+    'yaml' => 'application/x-yaml',
     'json' => 'application/json'
   }
   TYPE_FOR_EXT.default = 'application/octet-stream'
