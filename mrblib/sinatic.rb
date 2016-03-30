@@ -27,7 +27,7 @@ module Sinatic
     port: 8888,
     public: 'public'
   }
-  @routes = {'GET' => [], 'POST' => []}
+  @routes = {'GET' => [], 'POST' => [], 'DELETE' => []}
   @request = ''
   @shutdown = false
   
