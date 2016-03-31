@@ -111,7 +111,7 @@ module Sinatic
         # 404
         code = 404
         bb = HTTP_STATUS[code]
-        puts "> [#{code}] Sinatic Error on request #{r.headers}:\n#{bb}"
+        puts "> [#{r.path}=>#{code}] Sinatic Error on request #{r.headers}:\n#{bb}"
       ensure
         f.close if f
       end
@@ -129,12 +129,9 @@ module Sinatic
   
   def self.run(options = {})
     s = UV::TCP.new
-    config = {
-      :host => @options[:host],
-      :port => @options[:port].to_i
-    }.merge(options)
+    @options.merge!(options)
     
-    s.bind(UV::ip4_addr(config[:host], config[:port]))
+    s.bind(UV::ip4_addr(@options[:host], @options[:port]))
     s.listen(2000) do |x|
       return if x != 0 or s == nil
       begin
@@ -215,6 +212,7 @@ module Kernel
   end
   
   def query(r)
+    return "" unless r.query
     pairs = r.query.split('&')
     keys = []
     values = []
