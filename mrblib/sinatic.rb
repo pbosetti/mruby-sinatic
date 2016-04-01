@@ -63,6 +63,10 @@ module Sinatic
     return code, lines.join("\r\n") + content
   end
   
+  def self.redirect(path, delay=0)
+    "<meta http-equiv=refresh content='#{delay}; URL=#{path}'>"
+  end
+  
   def self.do(r)
     route = @routes[r.method].select {|path|
       if path[0].class == String
