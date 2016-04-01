@@ -216,7 +216,7 @@ module Kernel
     pairs = r.query.split('&')
     keys = []
     values = []
-    pairs.each {|e| k, v = e.split('='); keys << k; values << v}
+    pairs.each {|e| k, v = e.split('='); keys << HTTP::URL::decode(k); values << HTTP::URL::decode(v)}
     return keys.zip(values).to_h
   end
 end
